@@ -10,8 +10,8 @@ const create = async (req, res) => {
       message: "missing required name field",
     });
   }
-
-  const newContact = await Contact.create(contact);
+  const { _id } = req.user;
+  const newContact = await Contact.create({ ...contact, owner: _id });
   res.status(201).json({
     status: "success",
     code: 201,
