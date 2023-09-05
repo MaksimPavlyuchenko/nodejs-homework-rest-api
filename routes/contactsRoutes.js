@@ -1,17 +1,19 @@
 const express = require("express");
 const router = express.Router();
+
+const checkJwt = require("../middleware/checkJwt");
 const ctrl = require("../controllers");
 
-router.get("/", ctrl.getAll);
+router.get("/", checkJwt, ctrl.getAll);
 
-router.get("/:contactId", ctrl.getOneById);
+router.get("/:contactId", checkJwt, ctrl.getOneById);
 
-router.post("/", ctrl.create);
+router.post("/", checkJwt, ctrl.create);
 
-router.delete("/:contactId", ctrl.remove);
+router.delete("/:contactId", checkJwt, ctrl.remove);
 
-router.put("/:contactId", ctrl.update);
+router.put("/:contactId", checkJwt, ctrl.update);
 
-router.patch("/:contactId", ctrl.updateStatus);
+router.patch("/:contactId", checkJwt, ctrl.updateStatus);
 
 module.exports = router;
