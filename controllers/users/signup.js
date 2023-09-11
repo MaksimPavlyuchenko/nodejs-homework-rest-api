@@ -1,3 +1,4 @@
+const gravatar = require("gravatar");
 const bcrypt = require("bcrypt");
 require("colors");
 
@@ -24,12 +25,20 @@ const signup = async (req, res) => {
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
 
-  const newUser = await User.create({ email, password: hashedPassword });
+  const newUser = await User.create({
+    email,
+    password: hashedPassword,
+    avatarURL: gravatar.url(email),
+  });
 
   res.status(201).json({
     status: "Created",
     code: 201,
-    user: { email: newUser.email, subscription: newUser.subscription },
+    user: {
+      email: newUser.email,
+      subscription: newUser.subscription,
+      avatarURL: newUser.avatarURL,
+    },
   });
 };
 

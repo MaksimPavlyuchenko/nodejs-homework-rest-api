@@ -11,7 +11,10 @@ const create = async (req, res) => {
     });
   }
   const { _id } = req.user;
-  const newContact = await Contact.create({ ...contact, owner: _id });
+  const newContact = await Contact.create({
+    ...contact,
+    owner: _id,
+  });
   res.status(201).json({
     status: "success",
     code: 201,
