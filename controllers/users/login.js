@@ -13,6 +13,12 @@ const login = async (req, res) => {
   }
 
   const desiredUser = await User.findOne({ email });
+  if (!desiredUser.verify) {
+    res.status(400).json({
+      code: 400,
+      message: "Your email not verified",
+    });
+  }
   const validPassword = await bcrypt.compare(password, desiredUser.password);
 
   if (!validPassword) {

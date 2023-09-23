@@ -1,8 +1,10 @@
 const bcrypt = require("bcrypt");
+const crypto = require("crypto");
 require("colors");
 
 const User = require("../../models/userModel");
 const userSchema = require("../../schemas/userSchema");
+const { transporterEmail } = require("../../helpers");
 
 const signup = async (req, res) => {
   const { email, password } = req.body;
@@ -23,13 +25,28 @@ const signup = async (req, res) => {
   }
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
-
-  const newUser = await User.create({ email, password: hashedPassword });
+  const verificationToken = crypto.randomUUID();
+  const newUser = await User.create({
+    email,
+    password: hashedPassword,
+    verificationToken,
+  });
+  const emailOptions = {
+    to: email,
+    from: "maksim_pavlyuchenko@meta.ua",
+    subject: "Подтверждение email",
+    html: `<a target="_blank" href="http://localhost:8080/users/verify${verificationToken}">Подтвердить email </a>`,
+  };
+  await transporterEmail(emailOptions);
 
   res.status(201).json({
     status: "Created",
     code: 201,
-    user: { email: newUser.email, subscription: newUser.subscription },
+    user: {
+      email: newUser.email,
+      subscription: newUser.subscription,
+      verificationToken: newUser.verificationToken,
+    },
   });
 };
 

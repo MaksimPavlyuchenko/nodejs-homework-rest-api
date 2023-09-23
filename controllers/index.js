@@ -10,8 +10,10 @@ const login = require("./users/login");
 const logout = require("./users/logout");
 const getUser = require("./users/getUser");
 const updateSub = require("./users/updateSub");
+const verifyEmail = require("./users/verifyEmail");
+const additionalVerify = require("./users/additionalVerify");
 
-const ctrlWrapper = require("../helpers");
+const { ctrlWrapper } = require("../helpers");
 
 module.exports = {
   getAll: ctrlWrapper(getAll),
@@ -25,4 +27,6 @@ module.exports = {
   logout: ctrlWrapper(logout),
   getUser: ctrlWrapper(getUser),
   updateSub: ctrlWrapper(updateSub),
+  verifyEmail: ctrlWrapper(verifyEmail),
+  additionalVerify: ctrlWrapper(additionalVerify),
 };
